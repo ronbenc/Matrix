@@ -1,0 +1,8 @@
+# gitignore file made for mtm cpp projects by ronbenc
+.vscode/
+build/
+main.cpp
+*.exe
+*.out
+*.o
+*.obj
