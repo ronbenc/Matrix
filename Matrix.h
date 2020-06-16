@@ -36,6 +36,7 @@ namespace mtm
         Matrix<bool> operator!=(const T t) const;
         
         //Assumptions: none
+        template<class T>
         friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
         {
             os << printMatrix(mat.data, mat.dim) << std::endl;
@@ -349,7 +350,9 @@ namespace mtm
     template<class T>
     T& Matrix<T>::operator() (const int row, const int col)
     {
-        if((row >= this->dim.Dimensions::getRow()) || (col >= this->dim.Dimensions::getCol()))
+        int curr_row = this->dim.Dimensions::getRow();
+        int curr_col = this->dim.Dimensions::getCol();
+        if((row >= curr_row) || (row < 0) || (col >= curr_col) || (col < 0))
         {
             throw AccessIllegalElement();
         }
@@ -360,7 +363,9 @@ namespace mtm
     template<class T>
     const T& Matrix<T>::operator() (const int row, const int col) const
     {
-        if((row >= this->dim.Dimensions::getRow()) || (col >= this->dim.Dimensions::getCol()))
+        int curr_row = this->dim.Dimensions::getRow();
+        int curr_col = this->dim.Dimensions::getCol();
+        if((row >= curr_row) || (row < 0) || (col >= curr_col) || (col < 0))
         {
             throw AccessIllegalElement();
         }
