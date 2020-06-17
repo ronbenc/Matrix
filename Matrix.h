@@ -28,14 +28,20 @@ namespace mtm
         Matrix operator-() const;
         const T& operator() (const int row, const int col) const;
         T& operator() (const int row, const int col);
-        friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat);
         Matrix<bool> operator< (const T t) const;
         Matrix<bool> operator==(const T t) const;
         Matrix<bool> operator<=(const T t) const;
-        Matrix<bool> operator>(const T t) const;//negate <=
-        Matrix<bool> operator>=(const T t) const;//negate <
-        Matrix<bool> operator!=(const T t) const;//negate ==
-
+        Matrix<bool> operator>(const T t) const;
+        Matrix<bool> operator>=(const T t) const;
+        Matrix<bool> operator!=(const T t) const;
+        
+        //Assumptions: none
+        template<class T>
+        friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
+        {
+            os << printMatrix(mat.data, mat.dim) << std::endl;
+            return os;
+        }
         
         //********Exceptions Classes*************
         
@@ -49,18 +55,18 @@ namespace mtm
             public:
             const std::string what() const;
         };
-        class DimensionsMismatch 
+        class DimensionMismatch 
         {
             public:
             Dimensions dim1;
             Dimensions dim2;
-            DimensionsMismatch(const Dimensions dim1, const Dimensions dim2) :
+            DimensionMismatch(const Dimensions dim1, const Dimensions dim2) :
                 dim1(dim1), dim2(dim2) {}
             const std::string what() const;
         };
     };
 
-    //*****non-class member functions & operators*****
+    //*****non-class functions & operators*****
 
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b);
@@ -94,9 +100,9 @@ namespace mtm
     }
     
     template <class T>
-    const std::string Matrix<T>::DimensionsMismatch::what() const
+    const std::string Matrix<T>::DimensionMismatch::what() const
     {
-         std::string str = "Mtm matrix error: Dimensions mismatch: " + printDim(dim1) + printDim(dim1);
+         std::string str = "Mtm matrix error: Dimensions mismatch:\n" + printDim(dim1) + printDim(dim2);
          return str;
     }
 
@@ -142,7 +148,7 @@ namespace mtm
 
     //*****in-class member functions & operators by order******
     
-    //Assumptions: has default c'tor
+    //Assumptions: c'tor, assignment operator, d'tor defined
     template <class T>    
     Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) ://verify correctness
     dim(dimensions),
@@ -159,7 +165,7 @@ namespace mtm
         }
     }    
 
-    //Assumptions: has default c'tor, copy c'tor
+    //Assumptions: c'tor, d'tor, assignment operator defined
     template<class T>
     Matrix<T>::Matrix(const Matrix &toCopy) :
         dim(toCopy.dim),
@@ -176,15 +182,15 @@ namespace mtm
         }
     }
 
-    //Assumptions: has default d'tor
+    //Assumptions: d'tor defined
     template<class T>
     Matrix<T>::~Matrix<T>()
     {
-        delete[] data;//verify correctness
+        delete[] data;
     }
 
     
-    //Assumptions: has default d'tor
+    //Assumptions: assignment operator defined
     template<class T>
     Matrix<T>& Matrix<T>::operator=(const Matrix<T> &a)
     {
@@ -199,7 +205,7 @@ namespace mtm
         return *this;
     }
 
-    //Assumptions: has default c'tor, d'tor, copy c'tor
+    //Assumptions: c'tor, d'tor, assignment operator defined 
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, int b)
     {   
@@ -217,25 +223,28 @@ namespace mtm
         return returnMat;
     }
     
+    //Assumptions: none
     template<class T>
     int Matrix<T>::height() const
     {
         return this->dim.getRow();
     }
     
+    //Assumptions: none
     template<class T>
     int Matrix<T>::width() const
     {
         return this->dim.getCol();
     }
     
+    //Assumptions: none
     template<class T>
     int Matrix<T>::size() const
     {
         return this->element_num;
     }
 
-    //Assumptions: has copy c'tor
+    //Assumptions: c'tor, d'tor, assignment operator defined
     template<class T>
     Matrix<T> Matrix<T>::transpose() const
     {
@@ -252,7 +261,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: has copy c'tor
+    //Assumptions: assignment operator, c'tor, d'tor defined
     template<class T>
     Matrix<T> Matrix<T>::operator-() const
     {
@@ -270,13 +279,13 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: + between T objects operator defined, copy c'tor defined
+    //Assumptions: + between T objects operator, assignment operator, c'tor, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
         if(a.dim != b.dim)
         {
-            throw DimensionsMismatch();
+            throw DimensionMismatch(a.dim, b.dim);
         }
         Matrix<T> matrix = Matrix<T>(Dimensions(a.height(), a.width()));
         int height = a.height();
@@ -291,14 +300,14 @@ namespace mtm
         return matrix;
     }
     
-    //Assumptions: + between T objects operator defined, unary - operator
+    //Assumptions: + between T objects operator, unary -operator, c'tor, d'tor defined
     template<class T>
     Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b)
     {
         return a + (-b);
     }
 
-    //Assumptions: += operator defined
+    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const T t)
     {
@@ -315,14 +324,14 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: += operator between T objects defined
+    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
     template<class T>
     Matrix<T> operator+(const T a, const Matrix<T>& t)
     {
         return t + a;
     }
 
-    //Assumptions: += operator between T objects defined    
+    //Assumptions: += operator, assignment operator, c'tor, d'tor defined    
     template<class T>
     Matrix<T>& operator+= (Matrix<T>& a, const T t)
     {
@@ -330,24 +339,20 @@ namespace mtm
         return a;
     }
 
-    //Assumptions: += operator between T objects defined
+    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& b)
     {
         return b += t;
     }
 
-    /*std::ostream& operator<<(std::ostream& os, const IntMatrix& mat)
-    {
-        os << printMatrix(mat.data, mat.dim) << std::endl;
-        return os;
-    }*/
-
     //Assumptions: none
     template<class T>
     T& Matrix<T>::operator() (const int row, const int col)
     {
-        if((row >= this->dim.Dimensions::getRow()) || (col >= this->dim.Dimensions::getCol()))
+        int curr_row = this->dim.Dimensions::getRow();
+        int curr_col = this->dim.Dimensions::getCol();
+        if((row >= curr_row) || (row < 0) || (col >= curr_col) || (col < 0))
         {
             throw AccessIllegalElement();
         }
@@ -358,7 +363,9 @@ namespace mtm
     template<class T>
     const T& Matrix<T>::operator() (const int row, const int col) const
     {
-        if((row >= this->dim.Dimensions::getRow()) || (col >= this->dim.Dimensions::getCol()))
+        int curr_row = this->dim.Dimensions::getRow();
+        int curr_col = this->dim.Dimensions::getCol();
+        if((row >= curr_row) || (row < 0) || (col >= curr_col) || (col < 0))
         {
             throw AccessIllegalElement();
         }
@@ -366,7 +373,7 @@ namespace mtm
     }
 
 
-    //Assumptions: < operator defined, copy c'tor defined
+    //Assumptions: < operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator<(const T t) const
     {
@@ -383,7 +390,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: == operator defined, copy c'tor defined
+    //Assumptions: == operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator==(const T t) const
     {
@@ -400,7 +407,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: ==, < operators defined, copy c'tor defined
+    //Assumptions: ==, < operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator<=(const T t) const
     {
@@ -417,21 +424,21 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: <= operator defined, copy c'tor defined
+    //Assumptions: <, == operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator>(const T t) const
     {
         return ((*this) <= t).negateMatrix();
     }
     
-    //Assumptions: ==, < operators defined, copy c'tor defined
+    //Assumptions: <, == operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator>=(const T t) const
     {
         return ((*this) < t).negateMatrix();
     }
 
-    //Assumptions: == operator defined, copy c'tor defined
+    //Assumptions: == operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator!=(const T t) const
     {
@@ -439,7 +446,7 @@ namespace mtm
     }
 
 
-    //Assumptions: == operator defined, copy c'tor defined
+    //Assumptions: == operator, bool() operator defined
     template<class T>
     bool any(const Matrix<T>& a)
     {
@@ -450,7 +457,7 @@ namespace mtm
         {
             for(int j = 0 ; j < width ; j++)
             {               
-                if(<bool>(a(i , j)) == true)
+                if(bool(a(i , j)) == true)
                 {
                     res = true;
                 }
@@ -459,7 +466,7 @@ namespace mtm
         return res;
     }
 
-    //Assumptions: == operator defined, copy c'tor defined
+    //Assumptions: == operator, bool() operator defined
     template<class T>
     bool all(const Matrix<T>& a)
     {
@@ -470,7 +477,7 @@ namespace mtm
         {
             for(int j = 0 ; j < width ; j++)
             {               
-                if(<bool>(a(i , j)) == false)
+                if(bool(a(i , j)) == false)
                 {
                     res = false;
                 }
