@@ -377,7 +377,7 @@ namespace mtm
         {
             for(int j = 0 ; j < width ; j++)
             {               
-                matrix(i , j) = ((*this)(i , j) < b ? true : false);
+                matrix(i , j) = ((*this)(i , j) < t ? true : false);
             }        
         }
         return matrix;
