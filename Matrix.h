@@ -36,7 +36,7 @@ namespace mtm
         Matrix<bool> operator!=(const T t) const;
         
         //Assumptions: none
-        template<class T>
+        //template<class T> (this did not compile)
         friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
         {
             os << printMatrix(mat.data, mat.dim) << std::endl;
