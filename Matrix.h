@@ -64,6 +64,15 @@ namespace mtm
                 dim1(dim1), dim2(dim2) {}
             const std::string what() const;
         };
+
+        //********Itertor Classes*************
+        class iterator;    
+        iterator begin();
+        iterator end(); 
+
+        class const_iterator;
+        const_iterator begin() const;
+        const_iterator end() const; 
     };
 
     //*****non-class functions & operators*****
@@ -485,6 +494,151 @@ namespace mtm
         }
         return res;
     }
+
+    //*************iterator********************************************************
+    template<class T>
+    class Matrix<T>::iterator
+    {
+        const Matrix<T>* matrix;
+        int index;
+        iterator(const Matrix<T>* matrix, int index);
+        friend class Matrix<T>;
+
+    public:
+        T& operator*() const;
+        iterator& operator++();
+        iterator operator++(int);
+        bool operator==(const iterator& it) const;
+        bool operator!=(const iterator& it) const;
+        iterator(const iterator&) = default;
+        iterator& operator=(const iterator&) = default;
+        ~iterator() = default;
+    };
+
+    template<class T>
+    typename Matrix<T>::iterator Matrix<T>::begin()
+    {
+        return iterator(this, 0);
+    }
+
+    template<class T>
+    typename Matrix<T>::iterator Matrix<T>::end()
+    {
+        return iterator(this, (*this).size());
+    }
+
+    template<class T>
+    Matrix<T>::iterator::iterator(const Matrix<T>* matrix, int index) : matrix(matrix), index(index) {}
+
+    template<class T>
+    T& Matrix<T>::iterator::operator*() const
+    {
+        if(index >= (*matrix).size())
+            throw AccessIllegalElement();
+
+        return matrix->data[index];
+    }
+
+    template<class T>
+    typename Matrix<T>::iterator& Matrix<T>::iterator::operator++() 
+    {
+        ++index;
+        return *this;
+    }
+
+    template<class T>
+    typename Matrix<T>::iterator Matrix<T>::iterator::operator++(int) 
+    {
+        iterator result = *this;
+        ++*this;
+        return result;
+    }
+
+    template<class T>
+    bool Matrix<T>::iterator::operator==(const iterator& it) const
+    {
+        return index == it.index;
+    }
+
+    template<class T>
+    bool Matrix<T>::iterator::operator!=(const iterator& it) const
+    {
+        return !(*this == it);
+    }
+
+    //*************const_iterator********************************************************
+    template<class T>
+    class Matrix<T>::const_iterator
+    {
+        const Matrix<T>* const matrix;
+        int index;
+        const_iterator(const Matrix<T>* const matrix, int index);
+        friend class Matrix<T>;
+
+    public:
+        const T& operator*() const;
+        const_iterator& operator++();
+        const_iterator operator++(int);
+        bool operator==(const const_iterator& it) const;
+        bool operator!=(const const_iterator& it) const;
+        const_iterator(const const_iterator&) = default;
+        const_iterator& operator=(const const_iterator&) = default;
+        ~const_iterator() = default;
+    };
+
+    template<class T>
+    typename Matrix<T>::const_iterator Matrix<T>::begin() const
+    {
+        return const_iterator(this, 0);
+    }
+
+    template<class T>
+    typename Matrix<T>::const_iterator Matrix<T>::end() const
+    {
+        return const_iterator(this, (*this).size());
+    }
+
+    template<class T>
+    Matrix<T>::const_iterator::const_iterator(const Matrix<T>* const matrix, int index) : matrix(matrix), index(index) {}
+
+    template<class T>
+    const T& Matrix<T>::const_iterator::operator*() const
+    {
+        if(index >= (*matrix).size())
+            throw AccessIllegalElement();
+            
+        return matrix->data[index];
+    }
+
+    template<class T>
+    typename Matrix<T>::const_iterator& Matrix<T>::const_iterator::operator++() 
+    {
+        ++index;
+        return *this;
+    }
+
+    template<class T>
+    typename Matrix<T>::const_iterator Matrix<T>::const_iterator::operator++(int) 
+    {
+        iterator result = *this;
+        ++*this;
+        return result;
+    }
+
+    template<class T>
+    bool Matrix<T>::const_iterator::operator==(const const_iterator& it) const
+    {
+        return index == it.index;
+    }
+
+    template<class T>
+    bool Matrix<T>::const_iterator::operator!=(const const_iterator& it) const
+    {
+        return !(*this == it);
+    }
+
+
+
 
 }// namespace mtm
 
