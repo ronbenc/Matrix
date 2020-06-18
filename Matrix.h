@@ -34,6 +34,8 @@ namespace mtm
         Matrix<bool> operator>(const T t) const;
         Matrix<bool> operator>=(const T t) const;
         Matrix<bool> operator!=(const T t) const;
+        template<class Functor>
+        Matrix& apply(Functor functor());
         
         //Assumptions: none
         //template<class T> (this did not compile)
@@ -93,6 +95,7 @@ namespace mtm
     bool any(const Matrix<T>&);
     template<class T>
     bool all(const Matrix<T>&);
+
 
     //**************exceptions**************
 
@@ -495,6 +498,17 @@ namespace mtm
         return res;
     }
 
+    //Assumptions: matrix is mutable and functor() is defined for all the matrix elements
+    template<class T>
+    template<class Functor>
+    Matrix<T>& Matrix<T>::apply(Functor functor())
+    {
+        for(Matrix<T>::iterator it = *this.begin(); it != *this.end(); ++it)
+        {
+            functor(*this);
+        }
+    }
+
     //*************iterator********************************************************
     template<class T>
     class Matrix<T>::iterator
@@ -606,7 +620,7 @@ namespace mtm
     {
         if(index >= (*matrix).size())
             throw AccessIllegalElement();
-            
+
         return matrix->data[index];
     }
 

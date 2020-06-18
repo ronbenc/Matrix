@@ -30,7 +30,7 @@ int main(){
     try{
         const mtm::Matrix<int> mat_1 = mtm::Matrix<int>::Diagonal(2,1);
         mtm::Matrix<int> mat_2 = mtm::Matrix<int>::Diagonal(2,-1);
-        std::cout<<any(mat_1)<<" "<<any(mat_1-mat_2)<<" "<<all(mat_1+mat_2+1)<<std::endl;
+        std::cout<<mtm::any(mat_1)<<" "<<mtm::any(mat_1-mat_2)<<" "<<mtm::all(mat_1+mat_2+1)<<std::endl;
         std::cout<<(-mat_2)(1,1)<<(-mat_2)(2,2)<<std::endl;
     } catch(mtm::Matrix<int>::AccessIllegalElement& e){
         std::cout<<e.what()<<std::endl;
@@ -44,6 +44,8 @@ int main(){
         }
         std::cout<<(mat_1>=3);
         it++;
+        std::cout<<(mat_1==3);
+        *it;
     } catch(mtm::Matrix<int>::AccessIllegalElement& e){
         std::cout<<e.what()<<std::endl;
     }
