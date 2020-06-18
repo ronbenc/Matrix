@@ -148,7 +148,7 @@ namespace mtm
 
     //*****in-class member functions & operators by order******
     
-    //Assumptions: c'tor, assignment operator, d'tor defined
+    //Assumptions: c'tor without parameters, assignment operator, d'tor defined
     template <class T>    
     Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) ://verify correctness
     dim(dimensions),
@@ -165,7 +165,7 @@ namespace mtm
         }
     }    
 
-    //Assumptions: c'tor, d'tor, assignment operator defined
+    //Assumptions: c'tor without parameters, d'tor, assignment operator defined
     template<class T>
     Matrix<T>::Matrix(const Matrix &toCopy) :
         dim(toCopy.dim),
@@ -205,7 +205,7 @@ namespace mtm
         return *this;
     }
 
-    //Assumptions: c'tor, d'tor, assignment operator defined 
+    //Assumptions: c'tor without parameters, d'tor, assignment operator defined 
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, int b)
     {   
@@ -244,7 +244,7 @@ namespace mtm
         return this->element_num;
     }
 
-    //Assumptions: c'tor, d'tor, assignment operator defined
+    //Assumptions: c'tor without parameters, d'tor, assignment operator defined
     template<class T>
     Matrix<T> Matrix<T>::transpose() const
     {
@@ -261,7 +261,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: assignment operator, c'tor, d'tor defined
+    //Assumptions: assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> Matrix<T>::operator-() const
     {
@@ -279,7 +279,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: + between T objects operator, assignment operator, c'tor, d'tor defined
+    //Assumptions: + between T objects operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
@@ -300,14 +300,14 @@ namespace mtm
         return matrix;
     }
     
-    //Assumptions: + between T objects operator, unary -operator, c'tor, d'tor defined
+    //Assumptions: + between T objects operator, unary -operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b)
     {
         return a + (-b);
     }
 
-    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
+    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const T t)
     {
@@ -324,14 +324,14 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
+    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const T a, const Matrix<T>& t)
     {
         return t + a;
     }
 
-    //Assumptions: += operator, assignment operator, c'tor, d'tor defined    
+    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined    
     template<class T>
     Matrix<T>& operator+= (Matrix<T>& a, const T t)
     {
@@ -339,7 +339,7 @@ namespace mtm
         return a;
     }
 
-    //Assumptions: += operator, assignment operator, c'tor, d'tor defined
+    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& b)
     {
