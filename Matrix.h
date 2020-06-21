@@ -201,6 +201,11 @@ namespace mtm
     template<class T>
     Matrix<T>& Matrix<T>::operator=(const Matrix<T> &a)
     {
+        if(this == &a)
+        {
+            return *this;
+        }
+        
         dim = a.dim;
         element_num = a.element_num;
         delete data;
