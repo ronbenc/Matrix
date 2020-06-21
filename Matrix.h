@@ -13,7 +13,8 @@ namespace mtm
         //const T* getData() const;
         //const mtm::Dimensions& getDim() const;
         std::string printMatrix(const T* matrix, const Dimensions& dim);
-        Matrix<bool>& negateMatrix();
+        //Matrix<bool>& negateMatrix();
+        //static Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
         static std::string printDim(Dimensions dim);
         
         public:
@@ -90,6 +91,7 @@ namespace mtm
     bool any(const Matrix<T>&);
     template<class T>
     bool all(const Matrix<T>&);
+    Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
 
 
     //**************exceptions**************
@@ -124,19 +126,19 @@ namespace mtm
         return str;
     }
 
-    template<class T>
-    Matrix<bool>& Matrix<T>::negateMatrix()
+    
+    Matrix<bool>& negateMatrix(Matrix<bool>& toNegate)
     {
-        int height = this->height();
-        int width = this->width();
+        int height = toNegate.height();
+        int width = toNegate.width();
         for(int i = 0 ; i < height ; i++)
         {
             for(int j = 0 ; j < width ; j++)
             {               
-                (*this)(i , j) = ((*this)(i , j) == false ? true : false);
+                toNegate(i , j) = (toNegate(i , j) == false ? true : false);
             }        
         }
-        return *this;
+        return toNegate;
     }
 
     /*template<class T>
@@ -447,21 +449,24 @@ namespace mtm
     template<class T>
     Matrix<bool> Matrix<T>::operator>(const T t) const
     {
-        return ((*this) <= t).negateMatrix();
+        Matrix<bool> to_negate = ((*this) <= t);
+        return negateMatrix(to_negate);
     }
     
     //Assumptions: <, == operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator>=(const T t) const
     {
-        return ((*this) < t).negateMatrix();
+        Matrix<bool> to_negate = ((*this) < t);
+        return negateMatrix(to_negate);
     }
 
     //Assumptions: == operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator!=(const T t) const
     {
-        return ((*this) == t).negateMatrix();
+        Matrix<bool> to_negate = ((*this) == t);
+        return negateMatrix(to_negate);
     }
 
 
