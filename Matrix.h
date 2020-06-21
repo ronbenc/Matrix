@@ -12,12 +12,13 @@ namespace mtm
         T* data;
         //const T* getData() const;
         //const mtm::Dimensions& getDim() const;
+        std::string printMatrix(const T* matrix, const Dimensions& dim);
         Matrix<bool>& negateMatrix();
         static std::string printDim(Dimensions dim);
         
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
-        explicit Matrix(const Matrix &Matrix);
+        Matrix(const Matrix &Matrix);
         ~Matrix();
         Matrix& operator=(const Matrix& a);
         static Matrix Diagonal(int a, int b);
@@ -37,8 +38,8 @@ namespace mtm
         template<class Functor>
         Matrix& apply(Functor functor());
         
+        //ron: (this did not compile)
         //Assumptions: none
-        //template<class T> (this did not compile)
         friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
         {
             os << printMatrix(mat.data, mat.dim) << std::endl;
@@ -144,6 +145,20 @@ namespace mtm
         return *this;
     }
 
+    template<class T>
+    std::string Matrix<T>::printMatrix(const T* matrix, const Dimensions& dim){
+    std::string matrix_str;
+    int col_length = dim.getCol();
+    for (int i = 0; i < dim.getRow(); i++) {
+        for (int j = 0; j < col_length ; j++) {
+            matrix_str += std::to_string(*(matrix+col_length*i+j)) + " ";
+        }
+        matrix_str+=  "\n";
+    }
+    matrix_str+=  "\n";
+    return matrix_str;
+}
+
     /*template<class T>
     const T* Matrix<T>::getData() const
     {
@@ -184,10 +199,10 @@ namespace mtm
         element_num(toCopy.element_num),
         data(new T[element_num])
     {
-        if(!toCopy)
-        {
-            throw Matrix::IllegalInitialization();
-        }
+        // if(!toCopy)
+        // {
+        //     throw Matrix::IllegalInitialization();
+        // }
         for (int i = 0; i < element_num; i++)
         {
             data[i] = toCopy.data[i];
@@ -208,6 +223,8 @@ namespace mtm
     {
         dim = a.dim;
         element_num = a.element_num;
+        delete data;
+        data = new T[element_num];
         {
             for (int i = 0; i < element_num; i++)
             {
@@ -221,14 +238,14 @@ namespace mtm
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, int b)
     {   
-        Matrix<T> returnMat = Matrix<T>({a, b});
+        Matrix<T> returnMat({a, a});
         for(int i = 0 ; i < a ; i++)
         {
-            for(int j = 0 ; j < b ; j++)
+            for(int j = 0 ; j < a ; j++)
             {
                 if(i == j)
                 {
-                    returnMat(i , i) = b;                    
+                    returnMat(i , i) = b;
                 }
             }
         }
@@ -295,7 +312,7 @@ namespace mtm
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
-        if(a.dim != b.dim)
+        if(a.getDim() != b.dim)
         {
             throw DimensionMismatch(a.dim, b.dim);
         }
