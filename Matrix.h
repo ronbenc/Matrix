@@ -205,7 +205,7 @@ namespace mtm
         {
             return *this;
         }
-        
+
         dim = a.dim;
         element_num = a.element_num;
         delete data;
@@ -303,7 +303,8 @@ namespace mtm
         {
             Dimensions dim1(a.height(), a.width());
             Dimensions dim2(b.height(), b.width());
-            throw Matrix<T>::DimensionMismatch(dim1, dim2);
+            //throw Matrix<T>::DimensionMismatch(dim1, dim2);
+            throw typename Matrix<T>::DimensionMismatch(dim1, dim2);
         }
         Matrix<T> matrix = Matrix<T>(Dimensions(a.height(), a.width()));
         int height = a.height();
