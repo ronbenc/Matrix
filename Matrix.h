@@ -270,9 +270,9 @@ namespace mtm
         int width = this->Matrix<T>::width();
         for(int n = 0; n < width*height; n++) 
         {
-            int i = n / width;
-            int j = n % width;
-            matrix.data[n] = this->data[height*j + i];           
+            int i = n / height;
+            int j = n % height;
+            matrix.data[n] = this->data[width*j + i];           
         }
         return matrix;
     }
