@@ -35,7 +35,7 @@ namespace mtm
         Matrix<bool> operator>=(const T t) const;
         Matrix<bool> operator!=(const T t) const;
         template<class Functor>
-        Matrix& apply(Functor functor());
+        Matrix apply(Functor functor) const;
         
         //Assumptions: none
         //template<class T> (this did not compile)
@@ -184,10 +184,10 @@ namespace mtm
         element_num(toCopy.element_num),
         data(new T[element_num])
     {
-        if(!toCopy)
-        {
-            throw Matrix::IllegalInitialization();
-        }
+        // if(!toCopy)
+        // {
+        //     throw Matrix::IllegalInitialization();
+        // }
         for (int i = 0; i < element_num; i++)
         {
             data[i] = toCopy.data[i];
@@ -221,10 +221,11 @@ namespace mtm
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, int b)
     {   
-        Matrix<T> returnMat = Matrix<T>({a, b});
+        Dimensions dim(a,a);
+        Matrix<T> returnMat(dim, b);
         for(int i = 0 ; i < a ; i++)
         {
-            for(int j = 0 ; j < b ; j++)
+            for(int j = 0 ; j < a ; j++)
             {
                 if(i == j)
                 {
@@ -261,7 +262,7 @@ namespace mtm
     Matrix<T> Matrix<T>::transpose() const
     {
         Dimensions dim (this->dim.getCol(), this->dim.getRow());
-        Matrix<T> matrix = Matrix<T>(dim);
+        Matrix<T> matrix(dim);
         int height = this->Matrix<T>::height();
         int width = this->Matrix<T>::width();
         for(int n = 0; n < width*height; n++) 
@@ -501,12 +502,15 @@ namespace mtm
     //Assumptions: matrix is mutable and functor() is defined for all the matrix elements
     template<class T>
     template<class Functor>
-    Matrix<T>& Matrix<T>::apply(Functor functor())
+    Matrix<T> Matrix<T>::apply(Functor functor) const
     {
-        for(Matrix<T>::iterator it = *this.begin(); it != *this.end(); ++it)
+        Matrix<T> result = *this;
+        for(typename Matrix<T>::iterator it = result.begin(); it != result.end(); ++it)
         {
-            functor(*this);
+            *it = functor(*it);
         }
+
+        return result;
     }
 
     //*************iterator********************************************************
