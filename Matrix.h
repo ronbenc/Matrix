@@ -38,14 +38,7 @@ namespace mtm
         template<class Functor>
         Matrix& apply(Functor functor());
         
-        //ron: (this did not compile)
-        //Assumptions: none
-        friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
-        {
-            os << printMatrix(mat.data, mat.dim) << std::endl;
-            return os;
-        }
-        
+               
         //********Exceptions Classes*************
         
         class AccessIllegalElement 
@@ -65,6 +58,7 @@ namespace mtm
             Dimensions dim2;
             DimensionMismatch(const Dimensions dim1, const Dimensions dim2) :
                 dim1(dim1), dim2(dim2) {}
+            ~DimensionMismatch() = default;
             const std::string what() const;
         };
 
@@ -144,20 +138,6 @@ namespace mtm
         }
         return *this;
     }
-
-    template<class T>
-    std::string Matrix<T>::printMatrix(const T* matrix, const Dimensions& dim){
-    std::string matrix_str;
-    int col_length = dim.getCol();
-    for (int i = 0; i < dim.getRow(); i++) {
-        for (int j = 0; j < col_length ; j++) {
-            matrix_str += std::to_string(*(matrix+col_length*i+j)) + " ";
-        }
-        matrix_str+=  "\n";
-    }
-    matrix_str+=  "\n";
-    return matrix_str;
-}
 
     /*template<class T>
     const T* Matrix<T>::getData() const
@@ -312,9 +292,11 @@ namespace mtm
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
-        if(a.getDim() != b.dim)
+        if((a.width() != b.width()) || (a.height() != b.height()))
         {
-            throw DimensionMismatch(a.dim, b.dim);
+            Dimensions dim1(a.height(), a.width());
+            Dimensions dim2(b.height(), b.width());
+            throw Matrix<T>::DimensionMismatch(dim1, dim2);
         }
         Matrix<T> matrix = Matrix<T>(Dimensions(a.height(), a.width()));
         int height = a.height();
@@ -668,8 +650,14 @@ namespace mtm
         return !(*this == it);
     }
 
-
-
+    //ron: (this did not compile)
+    //Assumptions: none
+    template<class T>
+    std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
+    {
+        int width = mat.width();
+        return mtm::printMatrix(os, mat.begin(), mat.end(), width);        
+    }
 
 }// namespace mtm
 
