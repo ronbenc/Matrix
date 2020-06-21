@@ -12,12 +12,13 @@ namespace mtm
         T* data;
         //const T* getData() const;
         //const mtm::Dimensions& getDim() const;
+        std::string printMatrix(const T* matrix, const Dimensions& dim);
         Matrix<bool>& negateMatrix();
         static std::string printDim(Dimensions dim);
         
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
-        explicit Matrix(const Matrix &Matrix);
+        Matrix(const Matrix &Matrix);
         ~Matrix();
         Matrix& operator=(const Matrix& a);
         static Matrix Diagonal(int a, int b);
@@ -37,14 +38,7 @@ namespace mtm
         template<class Functor>
         Matrix apply(Functor functor) const;
         
-        //Assumptions: none
-        //template<class T> (this did not compile)
-        friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
-        {
-            os << printMatrix(mat.data, mat.dim) << std::endl;
-            return os;
-        }
-        
+               
         //********Exceptions Classes*************
         
         class AccessIllegalElement 
@@ -64,6 +58,7 @@ namespace mtm
             Dimensions dim2;
             DimensionMismatch(const Dimensions dim1, const Dimensions dim2) :
                 dim1(dim1), dim2(dim2) {}
+            ~DimensionMismatch() = default;
             const std::string what() const;
         };
 
@@ -208,6 +203,8 @@ namespace mtm
     {
         dim = a.dim;
         element_num = a.element_num;
+        delete data;
+        data = new T[element_num];
         {
             for (int i = 0; i < element_num; i++)
             {
@@ -221,15 +218,16 @@ namespace mtm
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, int b)
     {   
-        Dimensions dim(a,a);
-        Matrix<T> returnMat(dim, b);
+        // Dimensions dim(a,a);
+        // Matrix<T> returnMat(dim, b);
+        Matrix<T> returnMat({a, a});
         for(int i = 0 ; i < a ; i++)
         {
             for(int j = 0 ; j < a ; j++)
             {
                 if(i == j)
                 {
-                    returnMat(i , i) = b;                    
+                    returnMat(i , i) = b;
                 }
             }
         }
@@ -296,9 +294,11 @@ namespace mtm
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
-        if(a.dim != b.dim)
+        if((a.width() != b.width()) || (a.height() != b.height()))
         {
-            throw DimensionMismatch(a.dim, b.dim);
+            Dimensions dim1(a.height(), a.width());
+            Dimensions dim2(b.height(), b.width());
+            throw Matrix<T>::DimensionMismatch(dim1, dim2);
         }
         Matrix<T> matrix = Matrix<T>(Dimensions(a.height(), a.width()));
         int height = a.height();
@@ -655,8 +655,14 @@ namespace mtm
         return !(*this == it);
     }
 
-
-
+    //ron: (this did not compile)
+    //Assumptions: none
+    template<class T>
+    std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
+    {
+        int width = mat.width();
+        return mtm::printMatrix(os, mat.begin(), mat.end(), width);        
+    }
 
 }// namespace mtm
 
