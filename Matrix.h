@@ -111,7 +111,7 @@ namespace mtm
     template <class T>
     const std::string Matrix<T>::DimensionMismatch::what() const
     {
-         std::string str = "Mtm matrix error: Dimensions mismatch:\n" + printDim(dim1) + printDim(dim2);
+         std::string str = "Mtm matrix error: Dimension mismatch: " + printDim(dim1) + " " + printDim(dim2);
          return str;
     }
 
@@ -161,13 +161,13 @@ namespace mtm
     template <class T>    
     Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) ://verify correctness
     dim(dimensions),
-    element_num(dimensions.getRow() * dimensions.getCol()),
-    data(new T[element_num])
+    element_num(dimensions.getRow() * dimensions.getCol())    
     {
         if((dimensions.getRow() <= 0) || (dimensions.getCol() <= 0))
         {
             throw IllegalInitialization();
         }
+        data = new T[element_num];
         for (int i = 0; i < element_num; i++)
         {
             data[i] = init_val;
