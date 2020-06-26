@@ -215,6 +215,7 @@ namespace mtm
         {
             for (int i = 0; i < element_num; i++)
             {
+                //Itay - check
                 data[i] = a.data[i];
             }
         }
