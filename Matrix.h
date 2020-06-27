@@ -16,7 +16,7 @@ namespace mtm
         //Matrix<bool>& negateMatrix();
         //static Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
         static std::string printDim(Dimensions dim);
-        
+                
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
         Matrix(const Matrix &Matrix);
@@ -60,10 +60,16 @@ namespace mtm
         {
             public:
             Dimensions dim1;
+            std::string dim1_str;
             Dimensions dim2;
+            std::string dim2_str;
             DimensionMismatch(const Dimensions dim1, const Dimensions dim2) :
-                dim1(dim1), dim2(dim2) {}
-            ~DimensionMismatch() = default;
+                dim1(dim1), dim2(dim2)
+                {
+                    dim1_str = dim1.toString();
+                    dim2_str = dim2.toString();
+                }
+            ~DimensionMismatch() = default; //valgrind
             virtual const char* what() const noexcept override;
         };
 
@@ -115,7 +121,7 @@ namespace mtm
     template <class T>
     const char* Matrix<T>::DimensionMismatch::what() const noexcept
     {
-         std::string str = "Mtm matrix error: Dimension mismatch: " + printDim(dim1) + " " + printDim(dim2);
+         std::string str = "Mtm matrix error: Dimension mismatch: " + dim1_str + " " + dim2_str;
          return str.std::string::c_str();
     }
 
@@ -144,7 +150,7 @@ namespace mtm
         }
         return toNegate;
     }
-
+   
     /*template<class T>
     const T* Matrix<T>::getData() const
     {
