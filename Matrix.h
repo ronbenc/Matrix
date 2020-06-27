@@ -654,7 +654,7 @@ namespace mtm
     template<class T>
     typename Matrix<T>::const_iterator Matrix<T>::const_iterator::operator++(int) 
     {
-        iterator result = *this;
+        const_iterator result = *this;
         ++*this;
         return result;
     }
