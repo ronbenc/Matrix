@@ -15,8 +15,7 @@ namespace mtm
         std::string printMatrix(const T* matrix, const Dimensions& dim);
         //Matrix<bool>& negateMatrix();
         //static Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
-        static std::string printDim(Dimensions dim);
-                
+                        
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
         Matrix(const Matrix &Matrix);
@@ -128,15 +127,6 @@ namespace mtm
 
     //**********private functions*************
 
-    template <class T>
-    std::string Matrix<T>::printDim(Dimensions dim)
-    {
-        std::string str;
-        str += "(" + std::to_string(dim.mtm::Dimensions::getRow()) + "," + std::to_string(dim.mtm::Dimensions::getCol()) += ")";
-        return str;
-    }
-
-    
     Matrix<bool>& negateMatrix(Matrix<bool>& toNegate)
     {
         int height = toNegate.height();
