@@ -42,17 +42,21 @@ namespace mtm
                
         //********Exceptions Classes*************
         
-        class AccessIllegalElement 
+        class Exception : public std::exception
         {
             public:
-            const std::string what() const;
         };
-        class IllegalInitialization 
+        class AccessIllegalElement : public Exception
         {
             public:
-            const std::string what() const;
+            virtual const char* what() const noexcept override;
         };
-        class DimensionMismatch 
+        class IllegalInitialization : public Exception
+        {
+            public:
+            virtual const char* what() const noexcept override;
+        };
+        class DimensionMismatch : public Exception
         {
             public:
             Dimensions dim1;
@@ -60,7 +64,7 @@ namespace mtm
             DimensionMismatch(const Dimensions dim1, const Dimensions dim2) :
                 dim1(dim1), dim2(dim2) {}
             ~DimensionMismatch() = default;
-            const std::string what() const;
+            virtual const char* what() const noexcept override;
         };
 
         //********Itertor Classes*************
@@ -97,22 +101,22 @@ namespace mtm
     //**************exceptions**************
 
     template <class T>
-    const std::string Matrix<T>::AccessIllegalElement::what() const
+    const char* Matrix<T>::AccessIllegalElement::what() const noexcept
     {
         return "Mtm matrix error: An attempt to access an illegal element";
     }
 
     template <class T>
-    const std::string Matrix<T>::IllegalInitialization::what() const
+    const char* Matrix<T>::IllegalInitialization::what() const noexcept
     {
         return "Mtm matrix error: Illegal initialization values";
     }
     
     template <class T>
-    const std::string Matrix<T>::DimensionMismatch::what() const
+    const char* Matrix<T>::DimensionMismatch::what() const noexcept
     {
          std::string str = "Mtm matrix error: Dimension mismatch: " + printDim(dim1) + " " + printDim(dim2);
-         return str;
+         return str.std::string::c_str();
     }
 
 
