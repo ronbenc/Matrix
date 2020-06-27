@@ -214,7 +214,8 @@ namespace mtm
 
         dim = a.dim;
         element_num = a.element_num;
-        delete data;
+        //delete data;
+        delete[] data;
         data = new T[element_num];
         {
             for (int i = 0; i < element_num; i++)
@@ -295,7 +296,8 @@ namespace mtm
         {
             for(int j = 0 ; j < width ; j++)
             {
-                matrix(i, j) = -1*((*this)(i, j));
+                //matrix(i, j) = -1*((*this)(i, j));
+                matrix(i, j) = -(*this)(i, j);
                             
             }
         }
