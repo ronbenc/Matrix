@@ -22,7 +22,7 @@ namespace mtm
         Matrix(const Matrix &Matrix);
         ~Matrix();
         Matrix& operator=(const Matrix& a);
-        static Matrix Diagonal(int a, int b);
+        static Matrix Diagonal(int a, T t);
         int height() const;
         int width() const;
         int size() const;
@@ -224,7 +224,7 @@ namespace mtm
 
     //Assumptions: c'tor without parameters, d'tor, assignment operator defined 
     template<class T>
-    Matrix<T> Matrix<T>::Diagonal(int a, int b)
+    Matrix<T> Matrix<T>::Diagonal(int a, T t)
     {   
         // Dimensions dim(a,a);
         // Matrix<T> returnMat(dim, b);
@@ -235,7 +235,7 @@ namespace mtm
             {
                 if(i == j)
                 {
-                    returnMat(i , i) = b;
+                    returnMat(i , i) = t;
                 }
             }
         }
