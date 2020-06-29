@@ -48,12 +48,18 @@ namespace mtm
         class AccessIllegalElement : public Exception
         {
             public:
-            virtual const char* what() const noexcept override;
+            virtual const char* what() const noexcept override
+            {
+                return "Mtm matrix error: An attempt to access an illegal element";
+            }
         };
         class IllegalInitialization : public Exception
         {
             public:
-            virtual const char* what() const noexcept override;
+            virtual const char* what() const noexcept override
+            {
+                return "Mtm matrix error: Illegal initialization values";
+            }
         };
         class DimensionMismatch : public Exception
         {
@@ -67,7 +73,10 @@ namespace mtm
                     output = "Mtm matrix error: Dimension mismatch: " + dim1.toString() + " " + dim2.toString();
                 }
             ~DimensionMismatch() = default; //valgrind
-            virtual const char* what() const noexcept override;
+            virtual const char* what() const noexcept override
+            {                
+                return this->output.std::string::c_str();    
+            }
         };
 
         //********Itertor Classes*************
@@ -99,27 +108,6 @@ namespace mtm
     template<class T>
     bool all(const Matrix<T>& a);
     Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
-
-
-    //**************exceptions**************
-
-    template <class T>
-    const char* Matrix<T>::AccessIllegalElement::what() const noexcept
-    {
-        return "Mtm matrix error: An attempt to access an illegal element";
-    }
-
-    template <class T>
-    const char* Matrix<T>::IllegalInitialization::what() const noexcept
-    {
-        return "Mtm matrix error: Illegal initialization values";
-    }
-    
-    template <class T>
-    const char* Matrix<T>::DimensionMismatch::what() const noexcept
-    {
-        return this->output.std::string::c_str();
-    }
 
 
     //**********private functions*************
