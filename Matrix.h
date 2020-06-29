@@ -95,9 +95,9 @@ namespace mtm
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& b);
     template<class T>
-    bool any(const Matrix<T>&);
+    bool any(const Matrix<T>& a);
     template<class T>
-    bool all(const Matrix<T>&);
+    bool all(const Matrix<T>& a);
     Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
 
 
@@ -347,9 +347,9 @@ namespace mtm
 
     //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
-    Matrix<T> operator+(const T a, const Matrix<T>& t)
+    Matrix<T> operator+(const T t, const Matrix<T>& a)
     {
-        return t + a;
+        return a + t;
     }
 
     //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined    
