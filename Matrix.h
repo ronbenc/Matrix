@@ -566,8 +566,9 @@ namespace mtm
     T& Matrix<T>::iterator::operator*() const
     {
         if(index >= (*matrix).size())
+        {
             throw AccessIllegalElement();
-
+        }
         return matrix->data[index];
     }
 
@@ -637,8 +638,9 @@ namespace mtm
     const T& Matrix<T>::const_iterator::operator*() const
     {
         if(index >= (*matrix).size())
+        {
             throw AccessIllegalElement();
-
+        }
         return matrix->data[index];
     }
 
@@ -669,13 +671,12 @@ namespace mtm
         return !(*this == it);
     }
 
-    //ron: (this did not compile)
     //Assumptions: none
     template<class T>
     std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat)
     {
         int width = mat.width();
-        return mtm::printMatrix(os, mat.begin(), mat.end(), width);        
+        return mtm::printMatrix(os, mat.begin(), mat.end(), width);
     }
 
 }// namespace mtm
