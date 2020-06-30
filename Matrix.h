@@ -84,7 +84,7 @@ namespace mtm
         //Assumptions on T: == operator defined
         Matrix<bool> operator!=(const T t) const;
 
-        //ron - describe functor
+        //returns a new function contains in (i, j) functor imposed on (i , j) element of a given matrix
         //Assumptions on T: matrix is mutable and functor() is defined for all the matrix elements
         template<class Functor>
         Matrix apply(Functor functor) const;
