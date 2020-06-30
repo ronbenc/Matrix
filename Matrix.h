@@ -400,7 +400,7 @@ namespace mtm
         for(int i = 0 ; i < height ; i++)
         {
             for(int j = 0 ; j < width ; j++)
-            {               
+            {              
                 matrix(i , j) = ((((*this)(i , j) == t) || (*this)(i , j) < t) ? true : false);
             }        
         }
@@ -412,13 +412,19 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator>(const T t) const
     {
         Matrix<bool> to_negate = ((*this) <= t);
-        for(int i = 0 ; i < to_negate.height() ; i++)
+        for(bool& element : to_negate)
         {
-            for(int j = 0 ; j < to_negate.width() ; j++)
-            {
-                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
-            }
+            element -= true;
         }
+
+
+        // for(int i = 0 ; i < to_negate.height() ; i++)
+        // {
+        //     for(int j = 0 ; j < to_negate.width() ; j++)
+        //     {
+        //         to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
+        //     }
+        // }
         return to_negate;
     }
     
