@@ -103,25 +103,11 @@ namespace mtm
     bool any(const Matrix<T>& a);
     template<class T>
     bool all(const Matrix<T>& a);
-    Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
 
 
     //**********private functions*************
 
-    Matrix<bool>& negateMatrix(Matrix<bool>& toNegate)
-    {
-        int height = toNegate.height();
-        int width = toNegate.width();
-        for(int i = 0 ; i < height ; i++)
-        {
-            for(int j = 0 ; j < width ; j++)
-            {               
-                toNegate(i , j) = (toNegate(i , j) == false ? true : false);
-            }        
-        }
-        return toNegate;
-    }
-   
+    
     //*****in-class member functions & operators by order******
     
     //Assumptions: c'tor without parameters, assignment operator, d'tor defined
@@ -420,7 +406,14 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator>(const T t) const
     {
         Matrix<bool> to_negate = ((*this) <= t);
-        return negateMatrix(to_negate);
+        for(int i = 0 ; i < to_negate.height() ; i++)
+        {
+            for(int j = 0 ; j < to_negate.width() ; j++)
+            {
+                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
+            }
+        }
+        return to_negate;
     }
     
     //Assumptions: <, == operators defined
@@ -428,7 +421,14 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator>=(const T t) const
     {
         Matrix<bool> to_negate = ((*this) < t);
-        return negateMatrix(to_negate);
+       for(int i = 0 ; i < to_negate.height() ; i++)
+        {
+            for(int j = 0 ; j < to_negate.width() ; j++)
+            {
+                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
+            }
+        }
+        return to_negate;
     }
 
     //Assumptions: == operator defined
@@ -436,7 +436,14 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator!=(const T t) const
     {
         Matrix<bool> to_negate = ((*this) == t);
-        return negateMatrix(to_negate);
+        for(int i = 0 ; i < to_negate.height() ; i++)
+        {
+            for(int j = 0 ; j < to_negate.width() ; j++)
+            {
+                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
+            }
+        }
+        return to_negate;
     }
 
 

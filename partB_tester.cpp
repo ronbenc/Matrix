@@ -644,8 +644,7 @@ bool testOperatorScalarAddition(){
     ASSERT_TEST(mat6(0,1) == "Bye bye world!*");
 
     Matrix<string> mat7 = string("*") + mat6;
-    //ASSERT_TEST(mat7(0,0) == "*Hello world!*");
-    std::cout << "manually printed:" << mat7 << std::endl;//debug
+    ASSERT_TEST(mat7(0,0) == "*Hello world!*");
     ASSERT_TEST(mat7(0,1) == "*Bye bye world!*");
 
     return true;
