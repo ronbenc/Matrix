@@ -148,10 +148,6 @@ namespace mtm
         element_num(toCopy.element_num),
         data(new T[element_num])
     {
-        // if(!toCopy)
-        // {
-        //     throw Matrix::IllegalInitialization();
-        // }
         for (int i = 0; i < element_num; i++)
         {
             data[i] = toCopy.data[i];
