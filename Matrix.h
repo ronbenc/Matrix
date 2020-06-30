@@ -10,8 +10,7 @@ namespace mtm
         Dimensions dim;
         int element_num;
         T* data;
-        std::string printMatrix(const T* matrix, const Dimensions& dim);
-                                
+                                        
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
         Matrix(const Matrix &Matrix);
