@@ -75,12 +75,22 @@ namespace mtm
         };
 
         //********Itertor Classes*************
-        class iterator;    
+        //an itertor class to iterate over matrices elements
+        class iterator;
+
+        //set iterator to the first element in matrix    
         iterator begin();
+
+        //set iterator to the end of a matrix
         iterator end(); 
 
+        //an itertor class to iterate over constant matrices elements
         class const_iterator;
+
+        //set iterator to the first element in a constant matrix
         const_iterator begin() const;
+
+        //set iterator to the end of a constant matrix
         const_iterator end() const; 
     };
 
@@ -469,13 +479,28 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        //dereference current element to access element
         T& operator*() const;
+
+        //advance iterator to next element in a matrix (prefix)
         iterator& operator++();
+
+        //advance iterator to next element in a matrix (postfix)
         iterator operator++(int);
+
+        //true if iterator are equal iterators. false otherwise
         bool operator==(const iterator& it) const;
+
+        //true if iterator are not equal iterators. false otherwise
         bool operator!=(const iterator& it) const;
+
+        //iterator constructor
         iterator(const iterator&) = default;
+
+        //iterator assigment operator
         iterator& operator=(const iterator&) = default;
+
+        //iterator destructor
         ~iterator() = default;
     };
 
@@ -541,13 +566,28 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        //dereference current element to access element (read-only)
         const T& operator*() const;
+
+        //advance iterator to next element in a matrix (prefix)
         const_iterator& operator++();
+
+        //advance iterator to next element in a matrix (postfix)
         const_iterator operator++(int);
+
+        //true if iterators are equal. false otherwise
         bool operator==(const const_iterator& it) const;
+
+        //true if iterators are not equal iterators. false otherwise
         bool operator!=(const const_iterator& it) const;
+
+        //const iterator constructor
         const_iterator(const const_iterator&) = default;
+
+        //const iterator assigment operator
         const_iterator& operator=(const const_iterator&) = default;
+
+        //const iterator destructor
         ~const_iterator() = default;
     };
 
