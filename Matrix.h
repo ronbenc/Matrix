@@ -131,12 +131,22 @@ namespace mtm
         };
 
         //********Itertor Classes*************
-        class iterator;    
+        //an itertor class to iterate over matrices elements
+        class iterator;
+
+        //set iterator to the first element in matrix    
         iterator begin();
+
+        //set iterator to the end of a matrix
         iterator end(); 
 
+        //an itertor class to iterate over constant matrices elements
         class const_iterator;
+
+        //set iterator to the first element in a constant matrix
         const_iterator begin() const;
+
+        //set iterator to the end of a constant matrix
         const_iterator end() const; 
     };
 
@@ -296,15 +306,6 @@ namespace mtm
         {
             element = -element;
         }
-
-        // for(int i = 0 ; i < height ; i++)
-        // {
-        //     for(int j = 0 ; j < width ; j++)
-        //     {
-        //         matrix(i, j) = -(*this)(i, j);
-                            
-        //     }
-        // }
         return matrix;
     }
 
@@ -340,14 +341,9 @@ namespace mtm
     Matrix<T> operator+(const Matrix<T>& a, const T t)
     {
         Matrix<T> matrix = Matrix<T>(a);
-        int height = a.height();
-        int width = a.width();
-        for(int i = 0 ; i < height ; i++)
+        for(T& element : matrix)
         {
-            for(int j = 0 ; j < width ; j++)
-            {               
-                matrix(i , j) += t;
-            }        
+            element += t;
         }
         return matrix;
     }
@@ -356,14 +352,9 @@ namespace mtm
     Matrix<T> operator+(const T t, const Matrix<T>& a)
     {
         Matrix<T> matrix = Matrix<T>(a);
-        int height = a.height();
-        int width = a.width();
-        for(int i = 0 ; i < height ; i++)
+        for(T& element : matrix)
         {
-            for(int j = 0 ; j < width ; j++)
-            {               
-                matrix(i , j) = t + matrix(i, j);
-            }        
+            element = t + element;
         }
         return matrix;
     }
@@ -463,15 +454,6 @@ namespace mtm
         {
             element -= true;
         }
-
-
-        // for(int i = 0 ; i < to_negate.height() ; i++)
-        // {
-        //     for(int j = 0 ; j < to_negate.width() ; j++)
-        //     {
-        //         to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
-        //     }
-        // }
         return to_negate;
     }
     
@@ -479,12 +461,9 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator>=(const T t) const
     {
         Matrix<bool> to_negate = ((*this) < t);
-       for(int i = 0 ; i < to_negate.height() ; i++)
+        for(bool& element : to_negate)
         {
-            for(int j = 0 ; j < to_negate.width() ; j++)
-            {
-                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
-            }
+            element -= true;
         }
         return to_negate;
     }
@@ -493,32 +472,24 @@ namespace mtm
     Matrix<bool> Matrix<T>::operator!=(const T t) const
     {
         Matrix<bool> to_negate = ((*this) == t);
-        for(int i = 0 ; i < to_negate.height() ; i++)
+        for(bool& element : to_negate)
         {
-            for(int j = 0 ; j < to_negate.width() ; j++)
-            {
-                to_negate(i, j) = ((to_negate(i , j) == true) ? false : true);
-            }
+            element -= true;
         }
         return to_negate;
     }
 
-
     template<class T>
     bool any(const Matrix<T>& a)
     {
-        int height = a.height();
-        int width = a.width();
         bool res = false;
-        for(int i = 0 ; i < height ; i++)
+        for(const T& element : a)
         {
-            for(int j = 0 ; j < width ; j++)
-            {               
-                if(bool(a(i , j)) == true)
-                {
-                    res = true;
-                }
-            }
+             if((bool)element == true)
+             {
+                 res = true;
+                 break;
+             }
         }
         return res;
     }
@@ -526,18 +497,14 @@ namespace mtm
     template<class T>
     bool all(const Matrix<T>& a)
     {
-        int height = a.height();
-        int width = a.width();
         bool res = true;
-        for(int i = 0 ; i < height ; i++)
+        for(const T& element : a)
         {
-            for(int j = 0 ; j < width ; j++)
-            {               
-                if(bool(a(i , j)) == false)
-                {
-                    res = false;
-                }
-            }
+             if((bool)element == false)
+             {
+                 res = false;
+                 break;
+             }
         }
         return res;
     }
@@ -565,13 +532,28 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        //dereference current element to access element
         T& operator*() const;
+
+        //advance iterator to next element in a matrix (prefix)
         iterator& operator++();
+
+        //advance iterator to next element in a matrix (postfix)
         iterator operator++(int);
+
+        //true if iterator are equal iterators. false otherwise
         bool operator==(const iterator& it) const;
+
+        //true if iterator are not equal iterators. false otherwise
         bool operator!=(const iterator& it) const;
+
+        //iterator constructor
         iterator(const iterator&) = default;
+
+        //iterator assigment operator
         iterator& operator=(const iterator&) = default;
+
+        //iterator destructor
         ~iterator() = default;
     };
 
@@ -637,13 +619,28 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        //dereference current element to access element (read-only)
         const T& operator*() const;
+
+        //advance iterator to next element in a matrix (prefix)
         const_iterator& operator++();
+
+        //advance iterator to next element in a matrix (postfix)
         const_iterator operator++(int);
+
+        //true if iterators are equal. false otherwise
         bool operator==(const const_iterator& it) const;
+
+        //true if iterators are not equal iterators. false otherwise
         bool operator!=(const const_iterator& it) const;
+
+        //const iterator constructor
         const_iterator(const const_iterator&) = default;
+
+        //const iterator assigment operator
         const_iterator& operator=(const const_iterator&) = default;
+
+        //const iterator destructor
         ~const_iterator() = default;
     };
 
