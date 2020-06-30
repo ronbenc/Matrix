@@ -10,8 +10,6 @@ namespace mtm
         Dimensions dim;
         int element_num;
         T* data;
-        //const T* getData() const;
-        //const mtm::Dimensions& getDim() const;
         std::string printMatrix(const T* matrix, const Dimensions& dim);
         //Matrix<bool>& negateMatrix();
         //static Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
@@ -126,20 +124,6 @@ namespace mtm
         return toNegate;
     }
    
-    /*template<class T>
-    const T* Matrix<T>::getData() const
-    {
-        return this->data;
-    }*/
-
-    /*template<class T>
-    const mtm::Dimensions& Matrix<T>::getDim() const
-    {
-        return this->dim;
-    }*/
-
-
-
     //*****in-class member functions & operators by order******
     
     //Assumptions: c'tor without parameters, assignment operator, d'tor defined
