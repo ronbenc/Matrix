@@ -173,14 +173,19 @@ namespace mtm
         Matrix<T> returnMat({a, a});
         for(int i = 0 ; i < a ; i++)
         {
-            for(int j = 0 ; j < a ; j++)
-            {
-                if(i == j)
-                {
-                    returnMat(i , i) = t;
-                }
-            }
+            returnMat(i , i) = t;
         }
+
+        // for(int i = 0 ; i < a ; i++)
+        // {
+        //     for(int j = 0 ; j < a ; j++)
+        //     {
+        //         if(i == j)
+        //         {
+        //             returnMat(i , i) = t;
+        //         }
+        //     }
+        // }
         return returnMat;
     }
     
@@ -222,21 +227,26 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: assignment operator, c'tor without parameters, d'tor defined
+    //Assumptions: assignment operator, -operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> Matrix<T>::operator-() const
     {
         Matrix<T> matrix = Matrix<T>(*this);
         int height = this->Matrix<T>::height();
         int width = this->Matrix<T>::width();
-        for(int i = 0 ; i < height ; i++)
+        for(T& element : matrix)
         {
-            for(int j = 0 ; j < width ; j++)
-            {
-                matrix(i, j) = -(*this)(i, j);
-                            
-            }
+            element = -element;
         }
+
+        // for(int i = 0 ; i < height ; i++)
+        // {
+        //     for(int j = 0 ; j < width ; j++)
+        //     {
+        //         matrix(i, j) = -(*this)(i, j);
+                            
+        //     }
+        // }
         return matrix;
     }
 
