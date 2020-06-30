@@ -332,14 +332,24 @@ namespace mtm
         }
         return matrix;
     }
-
+    
     //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const T t, const Matrix<T>& a)
     {
-        return a + t;
+        Matrix<T> matrix = Matrix<T>(a);
+        int height = a.height();
+        int width = a.width();
+        for(int i = 0 ; i < height ; i++)
+        {
+            for(int j = 0 ; j < width ; j++)
+            {               
+                matrix(i , j) = t + matrix(i, j);
+            }        
+        }
+        return matrix;
     }
-
+    
     //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined    
     template<class T>
     Matrix<T>& operator+= (Matrix<T>& a, const T t)
@@ -352,7 +362,7 @@ namespace mtm
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& b)
     {
-        return b += t;
+        return b = t + b;
     }
 
     //Assumptions: none
