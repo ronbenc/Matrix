@@ -12,24 +12,80 @@ namespace mtm
         T* data;
                                         
         public:
+        //default c'tor - given matrix dimensions, default value by T c'tor
+        //Assumptions for T: c'tor without parameters, assignment operator, d'tor defined
         Matrix(const Dimensions dimensions, const T init_val = T());
+
+        //copy c'tor - construct new copy of a given matrix
+        //Assumptions for T: c'tor without parameters, d'tor, assignment operator defined
         Matrix(const Matrix &Matrix);
+
+        //default d'tor
+        //Assumptions for T: d'tor defined
         ~Matrix();
+
+        //assignment operator between two Matrix
+        //Assumptions for T: assignment operator defined
         Matrix& operator=(const Matrix& a);
+
+        //create new matrix which it's diagonal elements initialized to T, else T()
+        //Assumptions for T: c'tor without parameters, d'tor, assignment operator defined 
         static Matrix Diagonal(int a, T t);
+
+        //get a matrix height
+        //Assumptions for T: none
         int height() const;
+
+        //get a matrix width
+        //Assumptions for T: none
         int width() const;
+
+        //get number of elements in matrix
+        //Assumptions for T: none
         int size() const;
+
+        //returns a new matrix set to a given matrix's transpose
+        //Assumptions for T: c'tor without parameters, d'tor, assignment operator defined
         Matrix transpose() const;
+
+        //returns a new matrix with the negative elements of a given matrix
+        //Assumptions on T: assignment operator, -operator (unary), c'tor without parameters, d'tor defined
         Matrix operator-() const;
+
+        //read a given matrix (i , j) element
+        //Assumptions on T: none
         const T& operator() (const int row, const int col) const;
+
+        //access (with write permission) a given matrix (i , j) element
+        //Assumptions on T: none
         T& operator() (const int row, const int col);
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition < b
+        //Assumptions on T: < operator defined
         Matrix<bool> operator< (const T t) const;
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition == b
+        //Assumptions on T: == operator defined
         Matrix<bool> operator==(const T t) const;
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition <= b
+        //Assumptions on T: ==, < operators defined
         Matrix<bool> operator<=(const T t) const;
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition > b
+        //Assumptions on T: <, == operators defined
         Matrix<bool> operator>(const T t) const;
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition >= b
+        //Assumptions on T: <, == operators defined
         Matrix<bool> operator>=(const T t) const;
+
+        //returns a new boolean matrix, that contains (i , j) boolean variables defining whether (i , j) element meets condition != b
+        //Assumptions on T: == operator defined
         Matrix<bool> operator!=(const T t) const;
+
+        //ron - describe functor
+        //Assumptions on T: matrix is mutable and functor() is defined for all the matrix elements
         template<class Functor>
         Matrix apply(Functor functor) const;
         
@@ -86,27 +142,49 @@ namespace mtm
 
     //*****non-class functions & operators*****
 
+    //returns a new matrix - sum of two matrix
+    //Assumptions on T: + between T objects operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b);
+
+    //returns a new matrix - subtraction of two matrix
+    //Assumptions on T: + between T objects operator, unary -operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b);
+    
+    //returns a new matrix - sum of a and static matrix which all objects initialized to t
+    //Assumptions on T: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const T t);
+
+    //returns a new matrix - sum of a and static matrix which all objects initialized to t
+    //Assumptions on T: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const T t, const Matrix<T>& b);
+    
+    //returns a by reference - sum of a and static matrix which all objects initialized to t
+    //Assumptions on T: += operator, assignment operator, c'tor without parameters, d'tor defined    
     template<class T>
     Matrix<T>& operator+=(Matrix<T>& a, const T t);
+
+    //returns a by reference - sum of a and static matrix which all objects initialized to b
+    //Assumptions on T: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& b);
+    
+    //returns true if and only if bool() conversion of least one element is true, false otherwise
+    //Assumptions on T: == operator, bool() operator defined
     template<class T>
     bool any(const Matrix<T>& a);
+    
+    //returns true if and only if bool() conversions of all elements are true, false otherwise
+    //Assumptions: == operator, bool() operator defined
     template<class T>
     bool all(const Matrix<T>& a);
 
 
     //*****in-class member functions & operators******
     
-    //Assumptions: c'tor without parameters, assignment operator, d'tor defined
     template <class T>    
     Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) ://verify correctness
     dim(dimensions),
@@ -123,7 +201,6 @@ namespace mtm
         }
     }    
 
-    //Assumptions: c'tor without parameters, d'tor, assignment operator defined
     template<class T>
     Matrix<T>::Matrix(const Matrix &toCopy) :
         dim(toCopy.dim),
@@ -136,7 +213,6 @@ namespace mtm
         }
     }
 
-    //Assumptions: d'tor defined
     template<class T>
     Matrix<T>::~Matrix<T>()
     {
@@ -144,7 +220,6 @@ namespace mtm
     }
 
     
-    //Assumptions: assignment operator defined
     template<class T>
     Matrix<T>& Matrix<T>::operator=(const Matrix<T> &a)
     {
@@ -166,7 +241,6 @@ namespace mtm
         return *this;
     }
 
-    //Assumptions: c'tor without parameters, d'tor, assignment operator defined 
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, T t)
     {   
@@ -175,42 +249,27 @@ namespace mtm
         {
             returnMat(i , i) = t;
         }
-
-        // for(int i = 0 ; i < a ; i++)
-        // {
-        //     for(int j = 0 ; j < a ; j++)
-        //     {
-        //         if(i == j)
-        //         {
-        //             returnMat(i , i) = t;
-        //         }
-        //     }
-        // }
         return returnMat;
     }
     
-    //Assumptions: none
     template<class T>
     int Matrix<T>::height() const
     {
         return this->dim.getRow();
     }
     
-    //Assumptions: none
     template<class T>
     int Matrix<T>::width() const
     {
         return this->dim.getCol();
     }
     
-    //Assumptions: none
     template<class T>
     int Matrix<T>::size() const
     {
         return this->element_num;
     }
 
-    //Assumptions: c'tor without parameters, d'tor, assignment operator defined
     template<class T>
     Matrix<T> Matrix<T>::transpose() const
     {
@@ -227,7 +286,6 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: assignment operator, -operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> Matrix<T>::operator-() const
     {
@@ -250,7 +308,6 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: + between T objects operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
     {
@@ -273,14 +330,12 @@ namespace mtm
         return matrix;
     }
     
-    //Assumptions: + between T objects operator, unary -operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b)
     {
         return a + (-b);
     }
 
-    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T> operator+(const Matrix<T>& a, const T t)
     {
@@ -296,8 +351,7 @@ namespace mtm
         }
         return matrix;
     }
-    
-    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
+        
     template<class T>
     Matrix<T> operator+(const T t, const Matrix<T>& a)
     {
@@ -314,7 +368,6 @@ namespace mtm
         return matrix;
     }
     
-    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined    
     template<class T>
     Matrix<T>& operator+= (Matrix<T>& a, const T t)
     {
@@ -322,14 +375,12 @@ namespace mtm
         return a;
     }
 
-    //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
     Matrix<T>& operator+=(const T t, Matrix<T>& a)
     {
         return a = t + a;
     }
 
-    //Assumptions: none
     template<class T>
     T& Matrix<T>::operator() (const int row, const int col)
     {
@@ -342,7 +393,6 @@ namespace mtm
         return this->data[this->width()*row + col];
     }
 
-    //Assumptions: none
     template<class T>
     const T& Matrix<T>::operator() (const int row, const int col) const
     {
@@ -356,7 +406,6 @@ namespace mtm
     }
 
 
-    //Assumptions: < operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator<(const T t) const
     {
@@ -373,7 +422,6 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: == operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator==(const T t) const
     {
@@ -390,7 +438,6 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: ==, < operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator<=(const T t) const
     {
@@ -407,7 +454,7 @@ namespace mtm
         return matrix;
     }
 
-    //Assumptions: <, == operators defined
+    
     template<class T>
     Matrix<bool> Matrix<T>::operator>(const T t) const
     {
@@ -428,7 +475,6 @@ namespace mtm
         return to_negate;
     }
     
-    //Assumptions: <, == operators defined
     template<class T>
     Matrix<bool> Matrix<T>::operator>=(const T t) const
     {
@@ -443,7 +489,6 @@ namespace mtm
         return to_negate;
     }
 
-    //Assumptions: == operator defined
     template<class T>
     Matrix<bool> Matrix<T>::operator!=(const T t) const
     {
@@ -459,7 +504,6 @@ namespace mtm
     }
 
 
-    //Assumptions: == operator, bool() operator defined
     template<class T>
     bool any(const Matrix<T>& a)
     {
@@ -479,7 +523,6 @@ namespace mtm
         return res;
     }
 
-    //Assumptions: == operator, bool() operator defined
     template<class T>
     bool all(const Matrix<T>& a)
     {
@@ -499,7 +542,6 @@ namespace mtm
         return res;
     }
 
-    //Assumptions: matrix is mutable and functor() is defined for all the matrix elements
     template<class T>
     template<class Functor>
     Matrix<T> Matrix<T>::apply(Functor functor) const
