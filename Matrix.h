@@ -11,9 +11,7 @@ namespace mtm
         int element_num;
         T* data;
         std::string printMatrix(const T* matrix, const Dimensions& dim);
-        //Matrix<bool>& negateMatrix();
-        //static Matrix<bool>& negateMatrix(Matrix<bool>& toNegate);
-                        
+                                
         public:
         Matrix(const Dimensions dimensions, const T init_val = T());
         Matrix(const Matrix &Matrix);
