@@ -104,10 +104,7 @@ namespace mtm
     bool all(const Matrix<T>& a);
 
 
-    //**********private functions*************
-
-    
-    //*****in-class member functions & operators by order******
+    //*****in-class member functions & operators******
     
     //Assumptions: c'tor without parameters, assignment operator, d'tor defined
     template <class T>    
