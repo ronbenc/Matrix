@@ -68,7 +68,7 @@ namespace mtm
                 {
                     output = "Mtm matrix error: Dimension mismatch: " + dim1.toString() + " " + dim2.toString();
                 }
-            ~DimensionMismatch() = default; //valgrind
+            ~DimensionMismatch() = default;
             virtual const char* what() const noexcept override
             {                
                 return this->output.std::string::c_str();    
@@ -173,13 +173,11 @@ namespace mtm
 
         dim = a.dim;
         element_num = a.element_num;
-        //delete data;
         delete[] data;
         data = new T[element_num];
         {
             for (int i = 0; i < element_num; i++)
             {
-                //Itay - check
                 data[i] = a.data[i];
             }
         }
@@ -190,8 +188,6 @@ namespace mtm
     template<class T>
     Matrix<T> Matrix<T>::Diagonal(int a, T t)
     {   
-        // Dimensions dim(a,a);
-        // Matrix<T> returnMat(dim, b);
         Matrix<T> returnMat({a, a});
         for(int i = 0 ; i < a ; i++)
         {
@@ -255,7 +251,6 @@ namespace mtm
         {
             for(int j = 0 ; j < width ; j++)
             {
-                //matrix(i, j) = -1*((*this)(i, j));
                 matrix(i, j) = -(*this)(i, j);
                             
             }
@@ -271,7 +266,6 @@ namespace mtm
         {
             Dimensions dim1(a.height(), a.width());
             Dimensions dim2(b.height(), b.width());
-            //throw Matrix<T>::DimensionMismatch(dim1, dim2);
             throw typename Matrix<T>::DimensionMismatch(dim1, dim2);
         }
         Matrix<T> matrix = Matrix<T>(Dimensions(a.height(), a.width()));
@@ -338,9 +332,9 @@ namespace mtm
 
     //Assumptions: += operator, assignment operator, c'tor without parameters, d'tor defined
     template<class T>
-    Matrix<T>& operator+=(const T t, Matrix<T>& b)
+    Matrix<T>& operator+=(const T t, Matrix<T>& a)
     {
-        return b = t + b;
+        return a = t + a;
     }
 
     //Assumptions: none
