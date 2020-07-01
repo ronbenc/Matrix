@@ -227,17 +227,9 @@ namespace mtm
         element_num(toCopy.element_num),
         data(new T[element_num])
     {
-        try
+        for (int i = 0; i < element_num; i++)
         {
-            for (int i = 0; i < element_num; i++)
-            {
-                data[i] = toCopy.data[i];
-            }
-        }
-        catch(std::bad_alloc& e)
-        {
-            delete[] data;
-            throw;
+            data[i] = toCopy.data[i];
         }
     }
 
