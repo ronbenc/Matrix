@@ -196,7 +196,7 @@ namespace mtm
     //*****in-class member functions & operators******
     
     template <class T>    
-    Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) ://verify correctness
+    Matrix<T>::Matrix(const Dimensions dimensions, const T init_val) :
     dim(dimensions),
     element_num(dimensions.getRow() * dimensions.getCol())    
     {
@@ -205,9 +205,17 @@ namespace mtm
             throw IllegalInitialization();
         }
         data = new T[element_num];
-        for (int i = 0; i < element_num; i++)
+        try
         {
-            data[i] = init_val;
+            for (int i = 0; i < element_num; i++)
+            {
+                data[i] = init_val;
+            }
+        }
+        catch(std::bad_alloc& e)
+        {
+            delete[] data;
+            throw;
         }
     }    
 
