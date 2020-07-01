@@ -207,7 +207,7 @@ namespace mtm
             throw IllegalInitialization();
         }
         data = new T[element_num];
-        try
+        try // handle T assigment failure
         {
             for (int i = 0; i < element_num; i++)
             {
@@ -227,9 +227,17 @@ namespace mtm
         element_num(toCopy.element_num),
         data(new T[element_num])
     {
-        for (int i = 0; i < element_num; i++)
+        try
         {
-            data[i] = toCopy.data[i];
+            for (int i = 0; i < element_num; i++)
+            {
+                data[i] = toCopy.data[i];
+            }
+        }
+        catch(std::bad_alloc& e)
+        {
+            delete[] data;
+            throw;
         }
     }
 
@@ -243,7 +251,7 @@ namespace mtm
     template<class T>
     Matrix<T>& Matrix<T>::operator=(const Matrix<T> &a)
     {
-        if(this == &a)
+        if(this == &a) // check self assignment
         {
             return *this;
         }
