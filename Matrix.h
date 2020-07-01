@@ -480,6 +480,8 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        // Assumptions: non for all iterator's methods
+
         //dereference current element to access element
         T& operator*() const;
 
@@ -567,6 +569,8 @@ namespace mtm
         friend class Matrix<T>;
 
     public:
+        // Assumptions: non for all const iterator's methods
+
         //dereference current element to access element (read-only)
         const T& operator*() const;
 
