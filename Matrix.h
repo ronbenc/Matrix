@@ -310,8 +310,6 @@ namespace mtm
     Matrix<T> Matrix<T>::operator-() const
     {
         Matrix<T> matrix = Matrix<T>(*this);
-        int height = this->Matrix<T>::height();
-        int width = this->Matrix<T>::width();
         for(T& element : matrix)
         {
             element = -element;
